@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Bingontai</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+          integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js" integrity="sha256-bQmrZe4yPnQrLTY+1gYylfNMBuGfnT/HKsCGX+9Xuqo=" crossorigin="anonymous"></script>
+    <style>
+        html {
+            line-height: 1.15;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            margin: 0;
+            max-width: 800px;
+        }
+
+        main {
+            display: block;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin: 0.67em 0;
+        }
+
+        hr {
+            box-sizing: content-box;
+            height: 0;
+            overflow: visible;
+        }
+
+        pre {
+            font-family: monospace, monospace;
+            font-size: 1em;
+        }
+
+        a {
+            background-color: transparent;
+        }
+
+        abbr[title] {
+            border-bottom: none;
+            text-decoration: underline;
+            text-decoration: underline dotted;
+        }
+
+        b,
+        strong {
+            font-weight: bolder;
+        }
+
+        code,
+        kbd,
+        samp {
+            font-family: monospace, monospace;
+            font-size: 1em;
+        }
+
+        small {
+            font-size: 80%;
+        }
+
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+        }
+
+        sub {
+            bottom: -0.25em;
+        }
+
+        sup {
+            top: -0.5em;
+        }
+
+        img {
+            border-style: none;
+        }
+
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            font-family: inherit;
+            font-size: 100%;
+            line-height: 1.15;
+            margin: 0;
+        }
+
+        button,
+        input {
+            overflow: visible;
+        }
+
+        button,
+        select {
+            text-transform: none;
+        }
+
+        button,
+        [type="button"],
+        [type="reset"],
+        [type="submit"] {
+            -webkit-appearance: button;
+        }
+
+        button::-moz-focus-inner,
+        [type="button"]::-moz-focus-inner,
+        [type="reset"]::-moz-focus-inner,
+        [type="submit"]::-moz-focus-inner {
+            border-style: none;
+            padding: 0;
+        }
+
+        button:-moz-focusring,
+        [type="button"]:-moz-focusring,
+        [type="reset"]:-moz-focusring,
+        [type="submit"]:-moz-focusring {
+            outline: 1px dotted ButtonText;
+        }
+
+        fieldset {
+            padding: 0.35em 0.75em 0.625em;
+        }
+
+        legend {
+            box-sizing: border-box;
+            color: inherit;
+            display: table;
+            max-width: 100%;
+            padding: 0;
+            white-space: normal;
+        }
+
+        progress {
+            vertical-align: baseline;
+        }
+
+        textarea {
+            overflow: auto;
+        }
+
+        [type="checkbox"],
+        [type="radio"] {
+            box-sizing: border-box;
+            padding: 0;
+        }
+
+        [type="number"]::-webkit-inner-spin-button,
+        [type="number"]::-webkit-outer-spin-button {
+            height: auto;
+        }
+
+        [type="search"] {
+            -webkit-appearance: textfield;
+            outline-offset: -2px;
+        }
+
+        [type="search"]::-webkit-search-decoration {
+            -webkit-appearance: none;
+        }
+
+        ::-webkit-file-upload-button {
+            -webkit-appearance: button;
+            font: inherit;
+        }
+
+        details {
+            display: block;
+        }
+
+        summary {
+            display: list-item;
+        }
+
+        template {
+            display: none;
+        }
+
+        [hidden] {
+            display: none;
+        }
+
+        .number {
+            cursor: pointer;
+        }
+
+        .number:hover {
+            background-color: #dddddd;
+            user-select: none;
+        }
+
+        .number.picked {
+            background-color: #00dd00;
+        }
+
+        .bingo {
+            background-color: #cccccc;
+            text-transform: uppercase;
+            border-style: none;
+            font-size: 25px;
+            padding-left: 10px;
+            width: 20%;
+        }
+
+        .number.last {
+            background-color: #00dd00;
+        }
+
+        .number.gone {
+            color: #cccccc;
+        }
+
+
+        .freebie {
+            background-image: url("img/corona.png");
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 100%;
+            height: 100%;
+            background-position: center;
+        }
+
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+        /*         table {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 10px;
+            height: 90%;
+        }
+
+        tr.block {}
+
+        td.number,
+        td.bingo {
+            text-align: center;
+            font-family: Arial;
+            font-weight: bold;
+            font-size: 21px;
+            border: 2px solid;
+        } */
+
+        td.number {
+            font-size: 20px;
+        }
+
+        td.empty {
+            background-color: #f6f6f6;
+        }
+
+        .ui.compact.table td {
+            padding: .3em .7em;
+        }
+
+        .checksum-box {
+            text-align: center;
+        }
+
+        .checksum {
+            clear: both;
+            float: left;
+            width: 100%;
+            font-family: Arial;
+            font-weight: bold;
+            font-size: 21px;
+        }
+    </style>
+    <script>
+      window.onbeforeunload = function () {
+        return "ÄLÄ ÄLÄ ÄLÄ tai menetät";
+      };
+      let global = {
+        numbers: [],
+        bingo: ['B', 'I', 'N', 'G', 'O'],
+        translate: ['Bertta', 'iileti', 'Niilo', 'Gaabriel', 'Otto']
+      };
+
+      document.addEventListener('DOMContentLoaded', startGame, false);
+
+      function ready() {
+        let nums = Array.from(document.getElementsByClassName('number'));
+        nums.forEach(element => {
+          element.onclick = function () {
+            element.classList.toggle('picked');
+          }
+        });
+      }
+
+      function startGame() {
+        global.content = document.getElementById("content");
+        let socket = io('http://localhost:3000');
+        socket.on('bingoCard', function (bingoCard) {
+          console.log(bingoCard)
+          let str = '';
+          let c = 1;
+
+          /* document.getElementById('checksum').innerText = seed; */
+          document.getElementById('checksum_value').value = bingoCard.seed;
+
+          str += '<tr class="center aligned">';
+
+          for (let j = 0; j < 5; j++) {
+            str += '<td class="bingo">' + global.bingo[j] + '</td>';
+          }
+
+          str += '</tr>';
+
+          for (let i = 0; i < 15 * 5; i++) {
+
+            if (i % 5 === 0) {
+              str += '<tr class="center aligned">';
+            }
+
+            let c = Math.floor(i / 5) + 1 + (i % 5) * 5;
+            let number = bingoCard.numbers[i % 5][Math.floor(i / 5)];
+
+            str += '<td class="number" id="number_' + number + '">' + (number) + '</td>';
+
+            if (i % 5 === 4) {
+              str += '</tr>';
+            }
+
+            if (i % 25 === 24 && i !== 74) {
+              str += '<tr class="empty center aligned">';
+
+              for (let j = 0; j < 5; j++) {
+                str += '<td class="empty"> </td>';
+              }
+
+              str += '</tr>';
+            }
+          }
+          socket.on('newNumber', function (newNumber) {
+            let el = document.getElementById("newNumber")
+            let arr = el.value.split(/\s+/)
+            arr.unshift(newNumber)
+            console.log(newNumber);
+            el.value = arr.join("    ");
+          })
+          global.content.innerHTML = str;
+          ready()
+          return false;
+        })
+
+      }
+
+    </script>
+</head>
+<body class="ui">
+<table id="content" class="ui celled compact unstackable table"></table>
+
+<div class="ui checksum-box">
+    <div class="ui labeled input checksum-box">
+        <div class="ui label label">Checksum</div>
+        <input type="text" id="checksum_value" placeholder="mysite.com" value="pier" readonly />
+    </div>
+</div>
+<br />
+<div class="ui fluid input container">
+    <input id="newNumber" type="text" value="" readonly />
+</div>
+<!-- <div class="checksum" id="checksum"></div> -->
+</body>
+
+</html>
