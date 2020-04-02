@@ -302,7 +302,7 @@
 
       function startGame() {
         global.content = document.getElementById("content");
-        let socket = io('http://localhost:3000');
+        let socket = io();
         socket.on('bingoCard', function (bingoCard) {
           console.log(bingoCard)
           let str = '';
