@@ -45,7 +45,7 @@ function generateSeed() {
   let chars = "ABCDEFGHJKLMNPRTUVWXYZ2346789"
   let ret = "";
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 4; i++) {
     let c = chars.charAt(Math.random() * chars.length);
     ret += c;
   }

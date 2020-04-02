@@ -291,6 +291,19 @@
 
       document.addEventListener('DOMContentLoaded', startGame, false);
 
+      function getParams(url) {
+        let params = {};
+        let parser = document.createElement('a');
+        parser.href = url;
+        let query = parser.search.substring(1);
+        let vars = query.split('&');
+        for (let i = 0; i < vars.length; i++) {
+          let pair = vars[i].split('=');
+          params[pair[0]] = decodeURIComponent(pair[1]);
+        }
+        return params;
+      }
+
       function ready() {
         let nums = Array.from(document.getElementsByClassName('number'));
         nums.forEach(element => {
@@ -345,11 +358,16 @@
             }
           }
           socket.on('newNumber', function (newNumber) {
+            let char = newNumber <= 15 ? "B"
+              : newNumber <= 30 ? "I"
+                : newNumber <= 45 ? "N"
+                  : newNumber <= 60 ? "G" : "O"
             let el = document.getElementById("newNumber")
-            let arr = el.value.split(/\s+/)
-            arr.unshift(newNumber)
+            let arr = el.value.split(/\s+←\s+/)
+            arr = arr[0] === "" ? [] : arr;
+            arr.unshift(char + newNumber)
             console.log(newNumber);
-            el.value = arr.join("    ");
+            el.value = arr.join("  ←  ");
           })
           global.content.innerHTML = str;
           ready()
