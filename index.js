@@ -53,7 +53,7 @@ function generateSeed() {
   return ret;
 }
 
-function generateBingoCard() {
+function generateBingoCard(seed) {
   let arrayNumbers = [];
 
   let numbers = [[], [], [], [], []];
@@ -64,7 +64,7 @@ function generateBingoCard() {
     }
   }
 
-  let seed = generateSeed();
+  seed = seed ? seed : generateSeed();
   let shuffled_numbers = [];
   let rnd = seedrandom(seed);
 
@@ -94,13 +94,18 @@ function shuffle(array, rnd) {
 }
 
 io.on('connection', function(socket){
-  io.emit('bingoCard', generateBingoCard())
+  //io.emit('bingoCard', generateBingoCard())
   console.log('user connected')
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    console.log('user disconnected')
   });
-  socket.on('message', function(msg){
-    console.log('message: ' + msg);
+  socket.on('bingoCard', function(bingoCard){
+    console.log('bingoCard: ' + bingoCard)
+    if (bingoCard.seed) {
+      socket.emit('bingoCard', generateBingoCard(bingoCard.seed))
+    } else {
+      socket.emit('bingoCard', generateBingoCard())
+    }
   });
 });
 

@@ -291,18 +291,7 @@
 
       document.addEventListener('DOMContentLoaded', startGame, false);
 
-      function getParams(url) {
-        let params = {};
-        let parser = document.createElement('a');
-        parser.href = url;
-        let query = parser.search.substring(1);
-        let vars = query.split('&');
-        for (let i = 0; i < vars.length; i++) {
-          let pair = vars[i].split('=');
-          params[pair[0]] = decodeURIComponent(pair[1]);
-        }
-        return params;
-      }
+      console.log(new URLSearchParams(window.location.search).get("sheet"))
 
       function ready() {
         let nums = Array.from(document.getElementsByClassName('number'));
@@ -373,7 +362,12 @@
           ready()
           return false;
         })
-
+        let sheet = new URLSearchParams(window.location.search).get("sheet")
+        if (sheet) {
+          socket.emit('bingoCard', {seed: sheet})
+        } else {
+          socket.emit('bingoCard', {})
+        }
       }
 
     </script>
