@@ -305,6 +305,9 @@
       function startGame() {
         global.content = document.getElementById("content");
         let socket = io();
+        socket.on('players', function (players) {
+          console.log("current players: ", players)
+        })
         socket.on('bingoCard', function (bingoCard) {
           console.log(bingoCard)
           let str = '';

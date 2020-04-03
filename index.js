@@ -8,6 +8,7 @@ const seedrandom = require('seedrandom')
 app.use(express.static('public'))
 app.get('/', (req, res) => res.send('Hello World!'))
 let newNumbers = []
+// TODO: Maybe object with player hash as the key and seed as value
 let seeds = []
 
 app.get('/players', (req, res) => {
@@ -78,6 +79,7 @@ function generateBingoCard(seed) {
   for (let i = 0; i < 5; i++) {
     shuffled_numbers[i] = shuffle(numbers[i], rnd);
   }
+  // TODO: Check if seed already exists and what to do if it does
   seeds.push(seed)
   return {
     seed: seed,
@@ -101,12 +103,13 @@ function shuffle(array, rnd) {
 }
 
 io.on('connection', function(socket) {
-  console.log('user connected')
-  socket.on('disconnect', function(){
+  io.emit('players', Object.keys(io.of('/').connected).length)
+  socket.on('disconnect', function() {
+    // TODO: Some cleaning... Perhaps clear old seed from seedlist
     console.log('user disconnected')
+    io.emit('players', Object.keys(io.of('/').connected).length)
   });
   socket.on('bingoCard', function(bingoCard){
-    console.log('bingoCard: ' + bingoCard)
     if (bingoCard.seed) {
       socket.emit('bingoCard', generateBingoCard(bingoCard.seed))
     } else {
