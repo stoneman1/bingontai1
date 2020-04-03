@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Bingontai</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+          integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js" integrity="sha256-bQmrZe4yPnQrLTY+1gYylfNMBuGfnT/HKsCGX+9Xuqo=" crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', startEmanta, false);
+
+      function startEmanta() {
+        let socket = io()
+        socket.on('players', function (players) {
+          document.getElementById("players").innerText = "Players: " + players
+          console.log("current players: ", players)
+        })
+        socket.on('newNumber', function (newNumber) {
+          let char = newNumber <= 15 ? "B"
+            : newNumber <= 30 ? "I"
+              : newNumber <= 45 ? "N"
+                : newNumber <= 60 ? "G" : "O"
+          let el = document.getElementById("numbers")
+          let arr = el.innerText.split(/\s+←\s+/)
+          arr = arr[0] === "" ? [] : arr;
+          arr.unshift(char + newNumber)
+          console.log(newNumber);
+          el.innerText = arr.join("  ←  ");
+        })
+      }
+
+    </script>
+</head>
+<body class="ui">
+<div id="players"></div>
+<div id="seeds"></div>
+<div id="numbers"></div>
+</body>
+
+</html>
