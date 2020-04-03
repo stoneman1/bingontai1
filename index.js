@@ -10,6 +10,13 @@ app.get('/', (req, res) => res.send('Hello World!'))
 let newNumbers = []
 let seeds = []
 
+app.get('/players', (req, res) => {
+  res.send({
+      "hashes": Object.keys(io.of('/').connected),
+      "total": Object.keys(io.of('/').connected).length
+  })
+})
+
 app.get('/clearAll', (req, res) => {
   newNumbers = []
   seeds = []
@@ -93,8 +100,7 @@ function shuffle(array, rnd) {
   return array;
 }
 
-io.on('connection', function(socket){
-  //io.emit('bingoCard', generateBingoCard())
+io.on('connection', function(socket) {
   console.log('user connected')
   socket.on('disconnect', function(){
     console.log('user disconnected')
